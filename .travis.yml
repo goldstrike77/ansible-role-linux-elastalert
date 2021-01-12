@@ -13,15 +13,20 @@ addons:
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install ansible==2.9.16 simplejson paramiko six pyyaml requests pyOpenSSL passlib jmespath pywinrm
 
   # Check ansible version
   - ansible --version
 
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+  # Ansible Configuration Settings
+  - export ANSIBLE_INVENTORY_ENABLED=ini
+  - export ANSIBLE_DEPRECATION_WARNINGS=false
+  - export ANSIBLE_COMMAND_WARNINGS=false
+  - export ANSIBLE_HOST_KEY_CHECKING=false
+  - export ANSIBLE_SSH_PIPELINING=true
+  - export ANSIBLE_SSH_ARGS="-o GSSAPIAuthentication=no -o ControlMaster=auto -o ControlPersist=600s -o UserKnownHostsFile=/dev/null"
+  - export ANSIBLE_ROLES_PATH="[roles_path]"
 
-script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
