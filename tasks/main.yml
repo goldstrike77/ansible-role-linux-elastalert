@@ -1,0 +1,12 @@
+---
+- name: Include tasks for specific OS.
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Include installation tasks.
+  include: 'install.yml'
+
+- name: Include configuration tasks.
+  include: 'config.yml'
+
+- name: Flush handlers.
+  meta: flush_handlers

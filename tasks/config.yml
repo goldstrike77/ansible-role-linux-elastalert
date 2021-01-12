@@ -1,0 +1,50 @@
+---
+- name: Creating ElastAlert config folder.
+  file:
+    dest: '/etc/elastalert/rules'
+    state: 'directory'
+    owner: 'elastalert'
+    group: 'elastalert'
+    mode: '0750'
+
+- name: ElastAlert Configure & Scripts file transfer.
+  template:
+    src: '{{ item.src }}.j2'
+    dest: '{{ item.dest }}'
+    owner: '{{ item.owner }}'
+    group: '{{ item.owner }}'
+    mode: '{{ item.mode }}'
+  loop: '{{ elastalert_conf_scripts }}'
+  notify:
+    - Restart ElastAlert service.
+
+- name: Check for existing ElastAlert index.
+  uri:
+    url: "{% if elastalert_es_tls | bool %}https{% else %}http{% endif %}://{{ elastalert_es_host[0] }}:{{ elastalert_es_port }}/elastalert_status"
+    method: 'HEAD'
+    status_code: '200,404'
+    user: '{{ elastalert_es_user }}'
+    password: '{{ elastalert_es_pass }}'
+    validate_certs: 'no'
+    force_basic_auth: 'yes'
+  environment:
+    no_proxy: '{{ elastalert_es_host[0] }}'
+  register: elastalert_index_result
+  until: elastalert_index_result.status == 200 or elastalert_index_result.status == 404
+  retries: 5
+  delay: 2
+  no_log: true
+
+- name: Create ElastAlert index.
+  shell: >
+    source /opt/elastalert/bin/activate &&
+    /opt/elastalert/bin/elastalert-create-index
+    --config /etc/elastalert/config.yaml
+  args:
+    chdir: '/opt/elastalert'
+    executable: /bin/bash
+  environment:
+    no_proxy: '*'
+  when: elastalert_index_result.status == 404
+  become_user: 'elastalert'
+  become: true

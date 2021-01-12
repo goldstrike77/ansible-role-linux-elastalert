@@ -1,0 +1,13 @@
+---
+# General parameters #
+elastalert_is_install: false # A boolean to determine whether or not to install the ElastAlert.
+
+# Elasticsearch parameters #
+elastalert_es_host: # The host name of the Elasticsearch where ElastAlert records metadata about its searches.
+  - 'demo-prd-infra-monitor-elasticsearch.service.dc01.local'
+elastalert_es_port: '9200' # The port corresponding Elasticsearch host.
+elastalert_es_user: 'elastic' # The basic-auth username for connecting to Elasticsearch host.
+elastalert_es_pass: 'changeme' # The basic-auth password for connecting to Elasticsearch host.
+elastalert_es_tls: true # A boolean to determine whether or not to encrypting communications.
+elastalert_es_run_every: '5' # How often ElastAlert should query Elasticsearch in minutes.
+elastalert_es_buffer_time: '15' # Will continuously query against a window from the present to minutes.

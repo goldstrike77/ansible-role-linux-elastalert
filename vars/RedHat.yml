@@ -1,0 +1,9 @@
+---
+elastalert_dependent_package:
+  - 'gcc'
+  - 'openssl-devel'
+  - 'python36'
+  - 'python36-devel'
+  - 'python36-setuptools'
+  - 'python36-virtualenv'
+  - 'python3-pip'

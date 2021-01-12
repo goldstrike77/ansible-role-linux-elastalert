@@ -1,0 +1,9 @@
+---
+elastalert_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
+
+elastalert_python_dependent_packages:
+  - 'elastalert'
+
+elastalert_conf_scripts:
+  - { src: 'config.yaml', dest: '/etc/elastalert/config.yaml', owner: 'elastalert', mode: '640' }
+  - { src: 'elastalert.service', dest: '/lib/systemd/system/elastalert.service', owner: 'root', mode: '644' }

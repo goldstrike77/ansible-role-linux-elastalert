@@ -1,0 +1,19 @@
+[Unit]
+Description=Elasticsearch alerting system service
+Documentation=https://github.com/Yelp/elastalert
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/elastalert
+ExecStart=/opt/elastalert/bin/elastalert --config /etc/elastalert/config.yaml
+User=elastalert
+Type=idle
+StandardInput=tty-force
+StandardError=syslog
+LimitNOFILE=8192
+LimitNPROC=8192
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

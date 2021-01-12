@@ -1,0 +1,7 @@
+---
+- name: Restart ElastAlert service.
+  systemd:
+    name: 'elastalert.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: 'yes'

@@ -1,0 +1,25 @@
+---
+- name: Add the ElastAlert group.
+  group:
+    name: 'elastalert'
+
+- name: Add the ElastAlert user.
+  user:
+    name: 'elastalert'
+    group: 'elastalert'
+    create_home: false
+
+- name: Install ElastAlert dependence python package.
+  pip:
+    name: '{{ elastalert_python_dependent_packages }}'
+    state: 'present'
+    virtualenv_command: '/bin/virtualenv-3'
+    virtualenv_python: '/bin/python3'
+    virtualenv: '/opt/elastalert'
+    extra_args: '--default-timeout=120 -i https://{{ elastalert_pypi_url }}/simple --trusted-host {{ elastalert_pypi_url }}'
+  register: elastalert_python_dependent_packages_update
+  until: elastalert_python_dependent_packages_update is succeeded
+  retries: 5
+  delay: 2
+  notify:
+    - Restart ElastAlert service.
