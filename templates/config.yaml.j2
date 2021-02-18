@@ -14,7 +14,7 @@ buffer_time:
 
 # The Elasticsearch hostname for metadata writeback
 # Note that every rule can have its own Elasticsearch host
-es_host: {{ elastalert_es_host | list | random(seed=inventory_hostname) }}
+es_host: {{ elastalert_es_host | list | random(seed=ansible_hostname) }}
 
 # The Elasticsearch port
 es_port: {{ elastalert_es_port }}
